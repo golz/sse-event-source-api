@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>SSE - Event Source API</title>
+</head>
+<body>
+  <div id="app">
+    <div class="container">
+      <ul id="data-container">
+      </ul>
+    </div>
+  </div>
+  <script>
+    if (window.EventSource) {
+      const eventSource = new EventSource("http://localhost:8081/stream-sse-mvc")
+
+      eventSource.onmessage = function(e) {
+        const newElement = document.createElement('li')
+        const container = document.getElementById('data-container')
+
+        newElement.innerHTML = "message: " + e.data
+        container.append(newElement)
+      }
+  
+      eventSource.addEventListener('event-name', function(event) {
+        const newElement = document.createElement('li')
+        const container = document.getElementById('data-container')
+
+        newElement.innerHTML = "message: " + event.data
+        container.prepend(newElement)
+      })
+
+      eventSource.onerror = (error) => {
+        console.log(error)
+      }
+    }
+  </script>
+</body>
+</html>
